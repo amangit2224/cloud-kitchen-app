@@ -1,23 +1,20 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
 
 const Register = () => {
-  const [userType, setUserType] = useState('customer'); // 'customer' or 'rider'
+  const [userType, setUserType] = useState('customer');
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-    phone: '',
-    // Rider specific fields
-    vehicleType: 'motorcycle',
-    vehicleNumber: ''
+    name: '', email: '', password: '', confirmPassword: '', phone: '',
+    vehicleType: 'motorcycle', vehicleNumber: ''
   });
   const [loading, setLoading] = useState(false);
   const { register } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const redirectTo = params.get('redirect') || null;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -48,7 +45,7 @@ const Register = () => {
           role: 'customer'
         });
         toast.success('Registration successful! Please login.');
-        navigate('/login');
+        navigate(redirectTo ? `/login?redirect=${redirectTo}` : '/login');
       } else {
         // Rider registration - uses separate API
         const { registerRider } = await import('../services/riderService');

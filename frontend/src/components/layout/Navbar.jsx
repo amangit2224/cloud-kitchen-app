@@ -3,9 +3,11 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useCart } from '../../context/CartContext';
 import Cart from '../../pages/Cart';
+import SarasLogo from '../common/SarasLogo';
+import NotificationBell from '../common/NotificationBell';
 
 const CartIcon = ({ count, onClick }) => (
-  <button onClick={onClick} className="ck-nav-cart">
+  <button type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); onClick(); }} className="ck-nav-cart">
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
       <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
@@ -69,9 +71,11 @@ const UserMenu = ({ user, onLogout }) => {
           {user?.role === 'admin' && (
             <>
               <Link to="/admin/dashboard" className="ck-dropdown-item">📊 Dashboard</Link>
-              <Link to="/admin/orders" className="ck-dropdown-item">📋 Orders</Link>
-              <Link to="/admin/menu" className="ck-dropdown-item">🍽️ Menu</Link>
-              <Link to="/admin/riders" className="ck-dropdown-item">🛵 Riders</Link>
+              <Link to="/admin/orders"   className="ck-dropdown-item">📋 Orders</Link>
+              <Link to="/admin/menu"     className="ck-dropdown-item">🍽️ Menu</Link>
+              <Link to="/admin/riders"   className="ck-dropdown-item">🛵 Riders</Link>
+              <Link to="/admin/analytics" className="ck-dropdown-item">📈 Analytics</Link>
+              <Link to="/admin/promos"   className="ck-dropdown-item">🎟️ Promo Codes</Link>
             </>
           )}
           {user?.role === 'rider' && (
@@ -103,22 +107,21 @@ const Navbar = () => {
 
   const cartCount = cartItems?.reduce((sum, i) => sum + (i.quantity || 1), 0) || 0;
 
-  const handleLogout = () => { logout(); navigate('/'); };
+  const handleLogout = () => { logout(); navigate('/', { replace: true }); };
 
   return (
     <>
       <nav className="ck-nav">
         <div className="ck-nav-inner">
           {/* Logo */}
-          <Link to="/" className="ck-logo">
-            <span className="ck-logo-mark">CK</span>
-            <span className="ck-logo-text">Cloud Kitchen</span>
+          <Link to="/dashboard" className="ck-logo">
+            <SarasLogo size={38} showText={true} textColor="var(--ink)" />
           </Link>
 
           {/* Desktop nav links */}
           <div className="ck-nav-links">
             {/* Home - Only for customers and admins, NOT for riders */}
-            {(isCustomer || isAdmin) && <NavLink to="/">Home</NavLink>}
+            {(isCustomer || isAdmin) && <NavLink to="/dashboard">Home</NavLink>}
             
             {/* Menu - Only for customers and admins */}
             {(isCustomer || isAdmin) && (
@@ -137,6 +140,8 @@ const Navbar = () => {
                 <NavLink to="/admin/dashboard">Dashboard</NavLink>
                 <NavLink to="/admin/orders">Orders</NavLink>
                 <NavLink to="/admin/riders">Riders</NavLink>
+                <NavLink to="/admin/analytics">Analytics</NavLink>
+                <NavLink to="/admin/promos">Promos</NavLink>
               </>
             )}
             
@@ -155,6 +160,8 @@ const Navbar = () => {
               <>
                 {/* Cart - Only for customers */}
                 {isCustomer && <CartIcon count={cartCount} onClick={() => setIsCartOpen(true)} />}
+                {/* Notification bell - for customers and admins */}
+                {(isCustomer || isAdmin) && <NotificationBell />}
                 <UserMenu user={user} onLogout={handleLogout} />
               </>
             )}
@@ -173,7 +180,7 @@ const Navbar = () => {
       <div className={`ck-mobile-menu ${mobileOpen ? 'open' : ''}`}>
         {/* Home - Only for customers and admins */}
         {(isCustomer || isAdmin) && (
-          <NavLink to="/" onClick={() => setMobileOpen(false)}>🏠 Home</NavLink>
+          <NavLink to="/dashboard" onClick={() => setMobileOpen(false)}>🏠 Home</NavLink>
         )}
         
         {/* Menu - Only for customers and admins */}
@@ -191,8 +198,10 @@ const Navbar = () => {
         {isAdmin && (
           <>
             <NavLink to="/admin/dashboard" onClick={() => setMobileOpen(false)}>📊 Dashboard</NavLink>
-            <NavLink to="/admin/orders" onClick={() => setMobileOpen(false)}>📋 Manage Orders</NavLink>
-            <NavLink to="/admin/riders" onClick={() => setMobileOpen(false)}>🛵 Manage Riders</NavLink>
+            <NavLink to="/admin/orders"    onClick={() => setMobileOpen(false)}>📋 Manage Orders</NavLink>
+            <NavLink to="/admin/riders"    onClick={() => setMobileOpen(false)}>🛵 Manage Riders</NavLink>
+            <NavLink to="/admin/analytics" onClick={() => setMobileOpen(false)}>📈 Analytics</NavLink>
+            <NavLink to="/admin/promos"    onClick={() => setMobileOpen(false)}>🎟️ Promo Codes</NavLink>
           </>
         )}
         

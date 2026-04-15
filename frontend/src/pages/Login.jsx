@@ -1,13 +1,19 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import Input from '../components/common/Input';
 import Button from '../components/common/Button';
 import Loader from '../components/common/Loader';
+import SarasLogo from '../components/common/SarasLogo';
 
 const Login = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { login } = useAuth();
+
+  // Read ?redirect=... param so we can send the user back after login
+  const params = new URLSearchParams(location.search);
+  const redirectTo = params.get('redirect') || null;
   
   const [formData, setFormData] = useState({
     email: '',
@@ -67,13 +73,13 @@ const Login = () => {
       const response = await login(formData);
       const userRole = response.data.user.role;
       
-      // Redirect based on role
+      // Redirect based on role (or back to where they came from)
       if (userRole === 'admin') {
         navigate('/admin/dashboard');
       } else if (userRole === 'rider') {
         navigate('/rider/dashboard');
       } else {
-        navigate('/menu');
+        navigate(redirectTo || '/dashboard');
       }
     } catch (error) {
       setApiError(error.message || 'Login failed. Please try again.');
@@ -88,11 +94,11 @@ const Login = () => {
         <div className="bg-white rounded-lg shadow-xl p-8">
           {/* Header */}
           <div className="text-center mb-8">
-            <div className="mx-auto w-16 h-16 bg-gradient-to-r from-primary-600 to-secondary-600 rounded-full flex items-center justify-center mb-4">
-              <span className="text-white text-2xl font-bold">CK</span>
+            <div className="flex justify-center mb-4">
+              <SarasLogo size={80} showText={false} />
             </div>
             <h2 className="text-3xl font-bold text-gray-800">Welcome Back!</h2>
-            <p className="text-gray-600 mt-2">Sign in to your account</p>
+            <p className="text-gray-600 mt-1">Sign in to Sara's Kitchen</p>
           </div>
 
           {/* API Error Message */}

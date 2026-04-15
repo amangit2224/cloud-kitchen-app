@@ -1,5 +1,5 @@
 const { Op } = require('sequelize');
-const { Order, OrderItem, MenuItem, User, sequelize } = require('../models');
+const { Order, OrderItem, MenuItem, User, PromoCode, sequelize } = require('../models');
 const { sendOrderConfirmationEmail, sendOrderStatusEmail } = require('../utils/email');
 
 // ── Helper: emit order update to relevant parties ────────────────────────────
@@ -54,7 +54,24 @@ const createOrder = async (req, res) => {
     // Apply discount if promo code present
     let discountAmount = 0;
     if (req.body.promoCode) {
-      // Promo logic placeholder — Week 8
+      const promo = await PromoCode.findOne({
+        where: {
+          code: req.body.promoCode.toUpperCase().trim(),
+          isActive: true,
+          [Op.or]: [{ expiresAt: null }, { expiresAt: { [Op.gt]: new Date() } }]
+        }
+      });
+      if (promo && (promo.usageLimit === null || promo.usedCount < promo.usageLimit)
+          && totalAmount >= parseFloat(promo.minOrderAmount)) {
+        if (promo.discountType === 'percentage') {
+          discountAmount = (totalAmount * parseFloat(promo.discountValue)) / 100;
+          if (promo.maxDiscountAmount) discountAmount = Math.min(discountAmount, parseFloat(promo.maxDiscountAmount));
+        } else {
+          discountAmount = parseFloat(promo.discountValue);
+        }
+        discountAmount = Math.min(discountAmount, totalAmount);
+        await promo.increment('usedCount');
+      }
     }
 
     const order = await Order.create({
@@ -232,7 +249,7 @@ const cancelOrder = async (req, res) => {
       cancellationReason: reason || 'Cancelled by customer',
     });
 
-    // 🔴 REAL-TIME: notify admin
+    //  REAL-TIME: notify admin
     emitOrderUpdate(req, order, 'orderCancelled');
 
     // Send email notification for cancellation

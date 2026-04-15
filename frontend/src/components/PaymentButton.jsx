@@ -40,7 +40,7 @@ const PaymentButton = ({ amount, orderId, onSuccess }) => {
         key: process.env.REACT_APP_RAZORPAY_KEY_ID,
         amount: orderAmount,
         currency: currency,
-        name: 'Cloud Kitchen',
+        name: "Sara's Kitchen",
         description: `Payment for Order #${orderId}`,
         order_id: razorpayOrderId,
         handler: async (paymentResponse) => {

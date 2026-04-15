@@ -7,6 +7,31 @@ const { sequelize } = require('./config/database');
 const routes = require('./routes');
 const { errorHandler, notFound } = require('./middleware/errorHandler');
 
+// ── Rate limiting ─────────────────────────────────────────────────────────────
+let rateLimit;
+try {
+  rateLimit = require('express-rate-limit');
+} catch (e) {
+  // express-rate-limit not installed — skip rate limiting
+  rateLimit = null;
+}
+
+const authLimiter = rateLimit ? rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 20,
+  message: { success: false, message: 'Too many attempts. Please try again in 15 minutes.' },
+  standardHeaders: true,
+  legacyHeaders: false,
+}) : (req, res, next) => next();
+
+const apiLimiter = rateLimit ? rateLimit({
+  windowMs: 60 * 1000, // 1 minute
+  max: 120,
+  message: { success: false, message: 'Too many requests. Please slow down.' },
+  standardHeaders: true,
+  legacyHeaders: false,
+}) : (req, res, next) => next();
+
 const app = express();
 const server = http.createServer(app);
 
@@ -53,10 +78,14 @@ app.use(cors({
   origin: process.env.FRONTEND_URL || 'http://localhost:3000',
   credentials: true,
 }));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+
+// ── FIX: Increased payload limits for image uploads ───────────────────────────
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // ── Routes ────────────────────────────────────────────────────────────────────
+app.use('/api/v1/auth', authLimiter);  // strict limit on login/register
+app.use('/api/v1', apiLimiter);        // general API limit
 app.use('/api/v1', routes);
 
 // ── Health check ──────────────────────────────────────────────────────────────
@@ -93,6 +122,8 @@ const startServer = async () => {
       console.log(`   ➜ Orders:    http://localhost:${PORT}/api/v1/orders`);
       console.log(`   ➜ Riders:    http://localhost:${PORT}/api/v1/riders`);
       console.log(`   ➜ Analytics: http://localhost:${PORT}/api/v1/analytics`);
+      console.log(`   ➜ Upload:    http://localhost:${PORT}/api/v1/upload`);
+      console.log(`   ➜ Promo:     http://localhost:${PORT}/api/v1/promo`);
       console.log(`   ➜ Health:    http://localhost:${PORT}/api/v1/health`);
       console.log('\nPress CTRL+C to stop the server');
       console.log('═══════════════════════════════════════════════════\n');

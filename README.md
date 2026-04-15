@@ -1,218 +1,137 @@
-# Cloud Kitchen Web Application
+# Sara's Kitchen 🍛
 
-A cost-optimized cloud kitchen web application built with MERN stack and deployed on AWS EC2.
-
-## 🎯 Project Overview
-
-This is a 3-month internship project for **Skylena** that demonstrates:
-- Full-stack development with MERN stack
-- Cost-optimized cloud architecture ($0 AWS cost)
-- Docker containerization
-- Self-hosted monitoring (Prometheus + Grafana)
-- CI/CD with GitHub Actions
-
-## 🏗️ Architecture
-
-**Single EC2 Instance (t2.micro) - All Services Containerized:**
-
-```
-┌─────────────────────────────────────────────────────┐
-│                  EC2 Instance (t2.micro)            │
-│                                                     │
-│  ┌────────────┐  ┌────────────┐  ┌────────────┐  │
-│  │  Frontend  │  │  Backend   │  │   MySQL    │  │
-│  │   Nginx    │  │  Node.js   │  │  Database  │  │
-│  │  Port 80   │  │  Port 5000 │  │ Port 3306  │  │
-│  └────────────┘  └────────────┘  └────────────┘  │
-│                                                     │
-│  ┌────────────┐  ┌────────────┐                   │
-│  │Prometheus  │  │  Grafana   │                   │
-│  │ Port 9090  │  │  Port 3000 │                   │
-│  └────────────┘  └────────────┘                   │
-│                                                     │
-└─────────────────────────────────────────────────────┘
-                         │
-                         ▼
-                 ┌───────────────┐
-                 │   AWS S3      │
-                 │  (Images)     │
-                 └───────────────┘
-```
-
-## 📚 Tech Stack
-
-### Frontend
-- React 18.x
-- React Router
-- Tailwind CSS
-- Axios
-- Context API
-
-### Backend
-- Node.js 18 LTS
-- Express.js
-- Sequelize (MySQL ORM)
-- JWT Authentication
-- Bcrypt
-
-### Database
-- MySQL 8.0 (Containerized)
-
-### Monitoring
-- Prometheus (Metrics)
-- Grafana (Visualization)
-- Node Exporter (System metrics)
-- cAdvisor (Container metrics)
-
-### DevOps
-- Docker & Docker Compose
-- GitHub Actions (CI/CD)
-- Nginx (Reverse proxy)
-- AWS S3 (Image storage)
-
-## 🚀 Quick Start
-
-### Prerequisites
-- Node.js 18+
-- MySQL 8.0
-- Docker & Docker Compose
-- Git
-
-### Local Development Setup
-
-1. **Clone Repository**
-```bash
-git clone <repository-url>
-cd cloud-kitchen-app
-```
-
-2. **Backend Setup**
-```bash
-cd backend
-npm install
-cp .env.example .env
-# Edit .env with your configuration
-npm run dev
-```
-
-3. **Frontend Setup** (Coming soon in Week 3)
-```bash
-cd frontend
-npm install
-npm start
-```
-
-4. **Database Setup**
-```bash
-# Create MySQL database
-mysql -u root -p
-CREATE DATABASE cloud_kitchen_db;
-```
-
-## 📁 Project Structure
-
-```
-cloud-kitchen-app/
-├── backend/              # Node.js Express API
-│   ├── src/
-│   │   ├── config/       # Database config
-│   │   ├── controllers/  # Route controllers
-│   │   ├── middleware/   # Auth & error handling
-│   │   ├── models/       # Sequelize models
-│   │   ├── routes/       # API routes
-│   │   ├── utils/        # Helper functions
-│   │   └── server.js     # Entry point
-│   └── package.json
-├── frontend/             # React application (Coming Week 3)
-├── docker/               # Docker configuration (Coming Week 5)
-│   ├── docker-compose.yml
-│   ├── Dockerfile.frontend
-│   ├── Dockerfile.backend
-│   └── prometheus/
-└── docs/                 # Documentation
-```
-
-## 🗓️ Development Timeline
-
-| Phase | Weeks | Status | Description |
-|-------|-------|--------|-------------|
-| **Phase 1** | 1-2 | ✅ In Progress | Backend API Development |
-| **Phase 2** | 3-4 | ⏳ Pending | Frontend Development |
-| **Phase 3** | 5-6 | ⏳ Pending | AWS Integration & Docker |
-| **Phase 4** | 7-8 | ⏳ Pending | Monitoring & Deployment |
-| **Phase 5** | 9-10 | ⏳ Pending | CI/CD & Polish |
-| **Buffer** | 11-12 | ⏳ Pending | Testing & Documentation |
-
-## ✅ Current Progress: Week 1
-
-### Completed
-- ✅ Project structure created
-- ✅ Backend package.json configured
-- ✅ Database configuration with Sequelize
-- ✅ User, MenuItem, Order, OrderItem models
-- ✅ JWT authentication utilities
-- ✅ Auth, Menu, Order controllers
-- ✅ API routes configured
-- ✅ Error handling middleware
-- ✅ Express server setup
-
-### Next Steps (Week 1 Remaining)
-- 🔄 Test local backend setup
-- 🔄 Create seed data for testing
-- 🔄 Test all API endpoints
-- 🔄 Write API documentation
-
-## 🔐 Security Features
-
-- JWT-based authentication
-- Password hashing with bcrypt
-- Input validation
-- SQL injection protection (Sequelize ORM)
-- CORS configuration
-- Helmet.js security headers
-
-## 💰 Cost Optimization
-
-**Total AWS Cost: $0.00**
-
-| Service | Usage | Cost |
-|---------|-------|------|
-| EC2 t2.micro | 750 hrs/month | $0 (Free Tier) |
-| S3 Storage | <5GB images | $0 (Free Tier) |
-| RDS | **NOT USED** | $0 |
-| CloudWatch | **NOT USED** | $0 |
-
-**Savings:**
-- Database on EC2 instead of RDS: ~$15-20/month
-- Self-hosted monitoring: ~$3-5/month
-- **Total Savings: ~$18-25/month**
-
-## 📖 Documentation
-
-- [Backend API Documentation](./backend/README.md)
-- [Frontend Documentation](./frontend/README.md) - Coming Week 3
-- [Docker Setup Guide](./docker/README.md) - Coming Week 5
-- [Deployment Guide](./docs/DEPLOYMENT.md) - Coming Week 7
-
-## 🤝 Contributing
-
-This is an internship learning project. Follow these steps:
-
-1. Create feature branch
-2. Make changes
-3. Test thoroughly
-4. Submit for review
-
-## 📝 License
-
-MIT License - Skylena Internship Project
-
-## 👥 Team
-
-- **Intern:** [Your Name]
-- **Company:** Skylena
-- **Duration:** 3 months (Feb 2026 - Apr 2026)
+A production-grade cloud kitchen food delivery web application built during a 12-week internship at Skylena. Supports three user roles — **Customer**, **Admin**, and **Rider** — with real-time order tracking, payment processing, and a complete kitchen management system.
 
 ---
 
-**Status:** Week 1 - Backend Foundation ✅
+## Tech Stack
+
+**Frontend:** React 19 · React Router v7 · Socket.io Client · Chart.js · Tailwind CSS · Axios
+
+**Backend:** Node.js · Express · MySQL · Sequelize ORM · Socket.io · JWT · Nodemailer · Razorpay · express-rate-limit
+
+---
+
+## Features by Role
+
+### Customer
+- Browse 50+ menu items with search, category filter, price range
+- Add to cart with special instructions, guest intercept modal
+- Checkout with saved addresses and default address auto-fill
+- Apply promo / discount codes at checkout
+- Pay via Razorpay (Card / UPI / Netbanking) or Cash on Delivery
+- Real-time order tracking via Socket.io with live status progress bar
+- Order history, reviews and ratings, saved favourites
+- Manage profile, password, and saved addresses
+- Live notification bell for order status changes
+
+### Admin
+- Live order pipeline dashboard (Pending → Confirmed → Preparing → Ready)
+- Manage all orders with status advancement and rider assignment
+- Full menu management (create, edit, delete items)
+- Rider management with approve/reject workflow
+- Analytics dashboard — revenue line chart, orders by status doughnut, top-selling items bar chart
+- Promo code management — percentage or flat discounts with expiry and usage limits
+- Real-time new order alerts via notification bell
+
+### Rider
+- Registration with admin approval workflow
+- Toggle online/offline availability
+- View available orders and self-accept
+- Mark picked up → out for delivery → delivered
+- Earnings tracker (10% per delivery), delivery history
+
+---
+
+## Quick Start
+
+### 1. Clone and install
+```bash
+cd backend  && npm install
+cd frontend && npm install
+```
+
+### 2. Backend environment — create `backend/.env`
+```env
+PORT=5000
+DB_HOST=localhost
+DB_NAME=cloud_kitchen
+DB_USER=root
+DB_PASSWORD=your_password
+JWT_SECRET=your_jwt_secret
+FRONTEND_URL=http://localhost:3000
+EMAIL_USER=your@gmail.com
+EMAIL_PASS=your_16char_app_password
+RAZORPAY_KEY_ID=rzp_test_xxxxx
+RAZORPAY_KEY_SECRET=your_secret
+```
+
+### 3. Frontend environment — create `frontend/.env`
+```env
+REACT_APP_API_URL=http://localhost:5000/api/v1
+REACT_APP_RAZORPAY_KEY_ID=rzp_test_xxxxx
+```
+
+### 4. Database setup
+```sql
+CREATE DATABASE cloud_kitchen;
+```
+Run SQL files in `backend/migrations/` in order.
+
+### 5. Seed and start
+```bash
+cd backend && npm run seed && npm run dev
+cd frontend && npm start
+```
+
+---
+
+## Demo Credentials
+
+| Role     | Email                 | Password    |
+|----------|-----------------------|-------------|
+| Admin    | admin@saraskitchen.in | admin123    |
+| Customer | customer@example.com  | password123 |
+| Rider    | rider@example.com     | password123 |
+
+---
+
+## API Overview
+
+| Endpoint                        | Auth     | Description                  |
+|---------------------------------|----------|------------------------------|
+| POST /auth/register             | Public   | Register user                |
+| POST /auth/login                | Public   | Login, returns JWT           |
+| GET  /menu                      | Public   | Browse menu items            |
+| POST /orders                    | Customer | Place order                  |
+| POST /promo/validate            | Customer | Apply promo code             |
+| GET  /promo                     | Admin    | List all promo codes         |
+| POST /promo                     | Admin    | Create promo code            |
+| POST /payments/create-order     | Auth     | Create Razorpay order        |
+| POST /payments/verify           | Auth     | Verify payment signature     |
+| GET  /analytics/stats           | Admin    | KPI dashboard data           |
+| GET  /analytics/revenue-by-day  | Admin    | 7-day revenue chart data     |
+| GET  /analytics/top-items       | Admin    | Top selling menu items       |
+| POST /riders/orders/:id/accept  | Rider    | Accept an available order    |
+
+---
+
+## Real-Time Events (Socket.io)
+
+| Event                | Direction             | Description            |
+|----------------------|-----------------------|------------------------|
+| `newOrder`           | Server → Admin        | New order placed       |
+| `orderStatusUpdated` | Server → Customer + Admin | Status changed     |
+| `orderCancelled`     | Server → Customer + Admin | Order cancelled    |
+
+---
+
+## Security
+- Passwords hashed with bcrypt (10 rounds)
+- Auth routes: 20 requests / 15 min rate limit
+- API general: 120 requests / min rate limit
+- Razorpay verified server-side with HMAC-SHA256
+
+---
+
+*Built by Amanullah Hussain — Skylena Internship 2026*

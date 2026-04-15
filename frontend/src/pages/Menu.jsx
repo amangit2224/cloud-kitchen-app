@@ -114,15 +114,6 @@ const Menu = () => {
               ❤️ Favourites
             </Link>
           )}
-          {/* Cart button - ONLY for customers */}
-          {isCustomer && (
-            <Link to="/cart" className="btn btn-primary btn-sm" style={{ position: 'relative' }}>
-              🛒 Cart
-              {totalItems > 0 && (
-                <span className="mn-cart-badge">{totalItems > 9 ? '9+' : totalItems}</span>
-              )}
-            </Link>
-          )}
         </div>
       </div>
 

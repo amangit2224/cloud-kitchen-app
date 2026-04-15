@@ -43,7 +43,7 @@ const MenuItem = sequelize.define('MenuItem', {
     defaultValue: 'Other',
     validate: {
       isIn: {
-        args: [['Appetizers', 'Main Course', 'Desserts', 'Beverages', 'Salads', 'Soups', 'Other']],
+        args: [['Appetizers', 'Main Course', 'Desserts', 'Beverages', 'Salads', 'Soups', 'Breakfast', 'Snacks', 'Biriyani', 'Rice', 'Breads', 'Other']],
         msg: 'Invalid category'
       }
     }

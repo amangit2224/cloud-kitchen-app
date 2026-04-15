@@ -4,7 +4,8 @@ const Order = require('./Order');
 const OrderItem = require('./OrderItem');
 const Review = require('./Review');
 const Favorite = require('./Favorite');
-const Address = require('./Address');  
+const Address = require('./Address');
+const PromoCode = require('./PromoCode');
 
 // Define model associations
 
@@ -90,13 +91,6 @@ Address.belongsTo(User, {
   as: 'user'
 });
 
-// Export all models
 module.exports = {
-  User,
-  MenuItem,
-  Order,
-  OrderItem,
-  Review,
-  Favorite,
-  Address  
+  User, MenuItem, Order, OrderItem, Review, Favorite, Address, PromoCode
 };

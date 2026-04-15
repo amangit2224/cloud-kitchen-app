@@ -10,6 +10,8 @@ const favoriteRoutes = require('./favorite');
 const analyticsRoutes = require('./analytics');
 const riderRoutes = require('./riderRoutes');
 const paymentRoutes = require('./paymentRoutes'); 
+const promoRoutes   = require('./promoRoutes');
+const uploadRoutes  = require('./uploadRoutes');
 
 // Mount routes
 router.use('/auth', authRoutes);
@@ -21,6 +23,8 @@ router.use('/favorites', favoriteRoutes);
 router.use('/analytics', analyticsRoutes);
 router.use('/riders', riderRoutes);
 router.use('/payments', paymentRoutes); 
+router.use('/promo',    promoRoutes);
+router.use('/upload',   uploadRoutes);
 
 // Health check endpoint
 router.get('/health', (req, res) => {

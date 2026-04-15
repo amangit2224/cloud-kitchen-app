@@ -30,7 +30,7 @@ const Cart = ({ isOpen, onClose }) => {
       {/* Backdrop */}
       <div
         className={`fixed inset-0 bg-black transition-opacity duration-300 z-40 ${isOpen ? 'opacity-40 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
-        onClick={onClose}
+        onClick={(e) => { e.stopPropagation(); onClose(); }}
       />
 
       {/* Drawer */}
